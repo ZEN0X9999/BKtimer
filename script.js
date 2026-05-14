@@ -53,34 +53,43 @@
     targetTimeEl.value = `${pad(target.getHours())}:${pad(target.getMinutes())}`;
   }
 
+  // Autoplay-policy unlock: inside the user gesture, play() the element
+  // unmuted but at volume 0, then pause as soon as the promise resolves.
+  // That single gestured play() permanently unlocks the element for the
+  // page, so the eventual non-gesture playAlarm() is allowed. Muted
+  // playback alone is not enough on Safari.
+  function primeAudio() {
+    try {
+      alarmAudio.muted = false;
+      alarmAudio.volume = 0;
+      alarmAudio.loop = true;
+      const p = alarmAudio.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          alarmAudio.pause();
+          alarmAudio.currentTime = 0;
+          alarmAudio.volume = 1.0;
+        }).catch((err) => console.error("[primeAudio] play() rejected:", err.name, err.message));
+      }
+    } catch (e) { console.error("[primeAudio] sync error:", e); }
+  }
+
   function playAlarm() {
     try {
       alarmAudio.muted = false;
       alarmAudio.volume = 1.0;
       alarmAudio.currentTime = 0;
       const p = alarmAudio.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    } catch (e) {}
+      if (p && typeof p.catch === "function") {
+        p.catch((err) => console.error("[playAlarm] play() rejected:", err.name, err.message));
+      }
+    } catch (e) { console.error("[playAlarm] sync error:", e); }
   }
 
   function stopAlarm() {
     try {
       alarmAudio.pause();
-      alarmAudio.muted = true;
       alarmAudio.currentTime = 0;
-    } catch (e) {}
-  }
-
-  // Browsers block audio.play() outside a user gesture. By starting the
-  // audio muted on Start click, we satisfy autoplay policy now; when the
-  // timer fires later (no gesture), unmuting is allowed.
-  function primeAudio() {
-    try {
-      alarmAudio.muted = true;
-      alarmAudio.volume = 0;
-      alarmAudio.currentTime = 0;
-      const p = alarmAudio.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
     } catch (e) {}
   }
 
@@ -237,7 +246,14 @@
       countdownEl.textContent = "00:00:00";
       statusEl.textContent = "Target time reached.";
       metaEl.textContent = `Target was ${formatClock(targetDate)}.`;
-      stopTimer(false);
+      // Stop ticking but leave the active alarm/confetti/overlay alone —
+      // user dismisses them via the Dismiss button.
+      if (tickHandle) { clearInterval(tickHandle); tickHandle = null; }
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      targetTimeEl.disabled = false;
+      offsetEl.disabled = false;
+      randomBtn.disabled = false;
       return;
     }
 
@@ -270,8 +286,8 @@
     stopAlarm();
     removeAlertConfetti();
 
-    // Keep audio playing muted in the background so the eventual unmute
-    // (from a non-gesture setInterval tick) is allowed by autoplay policy.
+    // Resume AudioContext and decode the mp3 now (inside this click handler)
+    // so a later non-gesture playAlarm() is permitted.
     primeAudio();
 
     if (alertFireTime <= Date.now()) fireAlert();
@@ -313,6 +329,7 @@
   if (new URLSearchParams(window.location.search).get("dev") === "true") {
     testBtn.hidden = false;
     testBtn.addEventListener("click", () => {
+      primeAudio();
       statusEl.textContent = "TEST MODE";
       alertMessage.textContent = "Dev test — bracing for impact.";
       overlay.hidden = false;
