@@ -55,19 +55,32 @@
 
   function playAlarm() {
     try {
-      alarmAudio.currentTime = 0;
+      alarmAudio.muted = false;
       alarmAudio.volume = 1.0;
+      alarmAudio.currentTime = 0;
       const p = alarmAudio.play();
-      if (p && typeof p.catch === "function") {
-        p.catch(() => { /* browsers gate playback until a user gesture */ });
-      }
+      if (p && typeof p.catch === "function") p.catch(() => {});
     } catch (e) {}
   }
 
   function stopAlarm() {
     try {
       alarmAudio.pause();
+      alarmAudio.muted = true;
       alarmAudio.currentTime = 0;
+    } catch (e) {}
+  }
+
+  // Browsers block audio.play() outside a user gesture. By starting the
+  // audio muted on Start click, we satisfy autoplay policy now; when the
+  // timer fires later (no gesture), unmuting is allowed.
+  function primeAudio() {
+    try {
+      alarmAudio.muted = true;
+      alarmAudio.volume = 0;
+      alarmAudio.currentTime = 0;
+      const p = alarmAudio.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
     } catch (e) {}
   }
 
@@ -257,17 +270,9 @@
     stopAlarm();
     removeAlertConfetti();
 
-    // Unlock <audio> playback so a later fireAlert() (not in a gesture) works.
-    try {
-      alarmAudio.volume = 0;
-      const p = alarmAudio.play();
-      if (p && typeof p.then === "function") {
-        p.then(() => { alarmAudio.pause(); alarmAudio.currentTime = 0; alarmAudio.volume = 1; })
-         .catch(() => { alarmAudio.volume = 1; });
-      } else {
-        alarmAudio.pause(); alarmAudio.currentTime = 0; alarmAudio.volume = 1;
-      }
-    } catch (e) { alarmAudio.volume = 1; }
+    // Keep audio playing muted in the background so the eventual unmute
+    // (from a non-gesture setInterval tick) is allowed by autoplay policy.
+    primeAudio();
 
     if (alertFireTime <= Date.now()) fireAlert();
 
