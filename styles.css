@@ -1,0 +1,287 @@
+:root {
+  /* BK old-logo palette (sampled): red, yellow/orange, blue. */
+  --bk-red:    #D62300;
+  --bk-yellow: #F5B400;
+  --bk-blue:   #0052A0;
+  --bk-cream:  #FFF6E0;
+  --bk-ink:    #2A1A0A;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, #ffd86b 0%, transparent 45%),
+    radial-gradient(circle at 85% 90%, #ffb600 0%, transparent 45%),
+    linear-gradient(180deg, #FFDD66 0%, #F5B400 100%);
+  min-height: 100vh;
+  color: var(--bk-ink);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 56px;
+}
+
+.card {
+  width: min(640px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 28px 32px;
+  box-shadow:
+    0 10px 0 var(--bk-red),
+    0 22px 40px rgba(0, 0, 0, 0.25);
+  border: 4px solid var(--bk-blue);
+  position: relative;
+}
+
+/* Brand */
+.brand {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.logo {
+  width: 140px;
+  height: auto;
+  display: block;
+  margin: 0 auto 6px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.18));
+}
+.brand h1 {
+  margin: 6px 0 4px;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--bk-red);
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--bk-yellow);
+}
+.brand h1 span {
+  color: var(--bk-blue);
+  text-shadow: 2px 2px 0 var(--bk-yellow);
+}
+.tagline {
+  margin: 0;
+  font-style: italic;
+  color: var(--bk-ink);
+  opacity: 0.7;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.field label {
+  display: block;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--bk-red);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+input[type="time"], input[type="number"] {
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px 14px;
+  border: 3px solid var(--bk-red);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--bk-ink);
+  outline: none;
+  transition: box-shadow 0.15s;
+  min-width: 140px;
+}
+input[type="number"] { max-width: 110px; }
+input:focus {
+  box-shadow: 0 0 0 4px rgba(245, 180, 0, 0.45);
+}
+
+.suffix {
+  font-weight: 700;
+  color: var(--bk-blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+.hint {
+  display: block;
+  margin-top: 6px;
+  color: var(--bk-ink);
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn {
+  font: inherit;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-red {
+  background: var(--bk-red);
+  color: #fff;
+  border: 3px solid var(--bk-yellow);
+}
+.btn-red:hover:not(:disabled) { background: #b81d00; }
+.btn-yellow {
+  background: var(--bk-yellow);
+  color: var(--bk-ink);
+  border: 3px solid var(--bk-red);
+}
+.btn-yellow:hover:not(:disabled) { background: #e09f00; }
+.btn-ghost {
+  background: #fff;
+  color: var(--bk-blue);
+  border: 3px solid var(--bk-blue);
+  box-shadow: none;
+}
+.btn-ghost:hover:not(:disabled) { background: rgba(0, 82, 160, 0.08); }
+
+/* Display */
+.display {
+  background: var(--bk-blue);
+  color: var(--bk-yellow);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  border: 4px solid var(--bk-red);
+}
+.status {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--bk-yellow);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.countdown {
+  font-family: "Courier New", monospace;
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1;
+  color: var(--bk-yellow);
+  text-shadow: 0 0 12px rgba(245, 180, 0, 0.5);
+}
+.countdown.warning { color: #fff; animation: pulse 1s infinite; }
+.countdown.fired { color: #fff; background: var(--bk-red); border-radius: 8px; }
+.meta {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #fff;
+  opacity: 0.85;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* Alert overlay */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 82, 160, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: flash 0.6s infinite alternate;
+}
+.alert-overlay[hidden] { display: none; }
+@keyframes flash {
+  from { background: rgba(214, 35, 0, 0.55); }
+  to   { background: rgba(245, 180, 0, 0.55); }
+}
+.alert-box {
+  background: #fff;
+  border: 6px solid var(--bk-blue);
+  border-radius: 18px;
+  padding: 28px 28px 24px;
+  text-align: center;
+  max-width: 440px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  animation: bounce 0.5s infinite alternate;
+}
+@keyframes bounce {
+  from { transform: translateY(-6px); }
+  to   { transform: translateY(6px); }
+}
+.alert-logo {
+  width: 110px;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+}
+.alert-box h2 {
+  margin: 4px 0 10px;
+  font-size: 28px;
+  color: var(--bk-red);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 var(--bk-yellow);
+}
+.alert-box p { font-size: 16px; margin: 0 0 18px; color: var(--bk-ink); }
+
+/* Whopper confetti */
+.whopper-storm {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1500;
+  overflow: hidden;
+}
+.whopper-storm[hidden] { display: none; }
+.whopper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+  will-change: transform;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.35));
+}
+.whopper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .countdown { font-size: 40px; }
+  .brand h1 { font-size: 30px; }
+  .logo { width: 110px; }
+}

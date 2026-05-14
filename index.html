@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BK Timer — Have It Your Way</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <img class="logo" src="bk-logo.png" alt="Burger King" />
+      <h1>BK <span>Timer</span></h1>
+      <p class="tagline">Have your alarm your way.</p>
+    </header>
+
+    <section class="controls">
+      <div class="field">
+        <label for="targetTime">Target time</label>
+        <div class="row">
+          <input type="time" id="targetTime" />
+          <button type="button" id="randomBtn" class="btn btn-yellow">🎲 Random</button>
+        </div>
+        <small class="hint">When BK opens/closes — or whatever moment matters.</small>
+      </div>
+
+      <div class="field">
+        <label for="offsetMinutes">Alert me</label>
+        <div class="row">
+          <input type="number" id="offsetMinutes" min="0" max="1440" value="20" />
+          <span class="suffix">minutes before</span>
+        </div>
+        <small class="hint">e.g. 20 = alarm 20 min before target.</small>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="startBtn" class="btn btn-red">Start Timer</button>
+        <button type="button" id="stopBtn" class="btn btn-ghost" disabled>Stop</button>
+        <button type="button" id="testBtn" class="btn btn-yellow" hidden>🧪 Test Alarm</button>
+      </div>
+    </section>
+
+    <section class="display" id="display">
+      <div class="status" id="status">Set a target time to begin.</div>
+      <div class="countdown" id="countdown">--:--:--</div>
+      <div class="meta" id="meta"></div>
+    </section>
+  </main>
+
+  <div class="whopper-storm" id="whopperStorm" hidden></div>
+
+  <div class="alert-overlay" id="alertOverlay" hidden>
+    <div class="alert-box">
+      <img class="alert-logo" src="bk-logo.png" alt="" />
+      <h2>WHOPPER ALERT!</h2>
+      <p id="alertMessage">Time's almost up.</p>
+      <button type="button" id="dismissBtn" class="btn btn-red">Dismiss</button>
+    </div>
+  </div>
+
+  <audio id="alarmAudio" src="alarm.mp3" preload="auto" loop></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
